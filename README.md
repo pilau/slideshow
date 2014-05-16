@@ -9,13 +9,6 @@ A JavaScript-driven slideshow plugin for WordPress.
 
 ## Basic use
 
-Create an instance of the plugin class in your theme:
-
-	$PS = null;
-	if ( class_exists( 'Pilau_Slideshow' ) ) {
-		$PS = Pilau_Slideshow::get_instance();
-	}
-
 Add a filter to your theme to specify which pages slideshows will apply to (see the `scope` parameter for [Developer's Custom Fields](http://sltaylor.co.uk/wordpress/developers-custom-fields-docs/#functions-boxes-fields)):
 
 	add_filter( 'ps_scope', 'my_ps_scope' );
@@ -25,6 +18,10 @@ Add a filter to your theme to specify which pages slideshows will apply to (see 
 
 In the templates for pages with slideshows, use the following to output the page's slideshow:
 
+	$PS = null;
+	if ( class_exists( 'Pilau_Slideshow' ) ) {
+		$PS = Pilau_Slideshow::get_instance();
+	}
 	$PS->slideshow();
 
 ## Filter hooks
