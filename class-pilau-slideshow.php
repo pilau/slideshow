@@ -660,7 +660,7 @@ class Pilau_Slideshow {
 
 						<?php $i = 1; ?>
 
-						<?php foreach ( array_reverse( $this->custom_fields['ps-images'] ) as $image_id ) { ?>
+						<?php foreach ( $this->custom_fields['ps-images'] as $image_id ) { ?>
 
 							<?php
 
