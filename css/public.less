@@ -1,0 +1,108 @@
+/* Default styles for slideshows */
+
+/* Import variables first */
+@import 'vars.less';
+
+.ps-slideshow {
+	.ps-wrapper {
+		position: relative;
+		overflow: hidden;
+		ul.ps-list {
+			position: absolute;
+			top: 0;
+			left: 0;
+			> li {
+				height: 100%;
+				img {
+					display: block;
+					max-width: 100%;
+					height: auto;
+				}
+			}
+		}
+		.nav-arrows {
+			position: absolute;
+			z-index: 9999;
+			opacity: 0;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			a.nav {
+				position: relative;
+				display: block;
+				width: 50%;
+				height: 100%;
+				.arrow {
+					position: absolute;
+					top: 50%;
+					margin-top: -17px;
+					height: 34px;
+					width: 34px;
+					background: url('@{url-plugin}/assets/sprites.png?v=1') no-repeat 0 0;
+					overflow: hidden;
+					text-indent: -9999px;
+				}
+				&.previous {
+					float: left;
+					.arrow {
+						left: 20px;
+					}
+					&:hover, &:focus {
+						.arrow {
+							background-position: 0 -50px;
+						}
+					}
+				}
+				&.next {
+					float: right;
+					.arrow {
+						right: 20px;
+						background-position: -50px 0;
+					}
+					&:hover, &:focus {
+						.arrow {
+							background-position: -50px -50px;
+						}
+					}
+				}
+			}
+		}
+	}
+	&.ps-rotate-type-fade {
+		.ps-wrapper {
+			ul.ps-list {
+				width: 100%;
+				> li {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					display: none;
+					&.current {
+						display: block;
+						z-index: 50;
+					}
+					&.next {
+						display: block;
+						z-index: 40;
+					}
+				}
+			}
+		}
+	}
+	&.ps-rotate-type-scroll {
+		.ps-wrapper {
+			position: relative;
+			ul.ps-list {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				> li {
+					float: left;
+				}
+			}
+		}
+	}
+}

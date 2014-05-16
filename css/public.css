@@ -1,0 +1,97 @@
+/* Default styles for slideshows */
+/* Import variables first */
+/* LESS variables and mixins */
+/* URL paths */
+.ps-slideshow .ps-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.ps-slideshow .ps-wrapper ul.ps-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.ps-slideshow .ps-wrapper ul.ps-list > li {
+  height: 100%;
+}
+.ps-slideshow .ps-wrapper ul.ps-list > li img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.ps-slideshow .ps-wrapper .nav-arrows {
+  position: absolute;
+  z-index: 9999;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav {
+  position: relative;
+  display: block;
+  width: 50%;
+  height: 100%;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav .arrow {
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  height: 34px;
+  width: 34px;
+  background: url('/wp-content/plugins/pilau-slideshow/assets/sprites.png?v=1') no-repeat 0 0;
+  overflow: hidden;
+  text-indent: -9999px;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous {
+  float: left;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous .arrow {
+  left: 20px;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous:hover .arrow,
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous:focus .arrow {
+  background-position: 0 -50px;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.next {
+  float: right;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.next .arrow {
+  right: 20px;
+  background-position: -50px 0;
+}
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.next:hover .arrow,
+.ps-slideshow .ps-wrapper .nav-arrows a.nav.next:focus .arrow {
+  background-position: -50px -50px;
+}
+.ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list {
+  width: 100%;
+}
+.ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list > li {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: none;
+}
+.ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list > li.current {
+  display: block;
+  z-index: 50;
+}
+.ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list > li.next {
+  display: block;
+  z-index: 40;
+}
+.ps-slideshow.ps-rotate-type-scroll .ps-wrapper {
+  position: relative;
+}
+.ps-slideshow.ps-rotate-type-scroll .ps-wrapper ul.ps-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+.ps-slideshow.ps-rotate-type-scroll .ps-wrapper ul.ps-list > li {
+  float: left;
+}
