@@ -169,13 +169,12 @@ jQuery( document ).ready( function( $ ) {
 							break;
 
 					}
-					console.log( n );
 
 					// Do the fade
 					switch ( ss.fade_type ) {
 
 						case 'crossfade':
-							n.addClass( 'next' );
+							n.show().addClass( 'next' );
 							cur.fadeOut( ss.rotate_speed, function() {
 								cur.removeClass( 'current' );
 								n.removeClass( 'next' ).addClass( 'current' );
