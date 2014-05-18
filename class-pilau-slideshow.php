@@ -401,6 +401,7 @@ class Pilau_Slideshow {
 						'label'			=> __( 'Image size', $this->plugin_slug ),
 						'options'		=> $image_size_options,
 						'type'			=> 'select',
+						'default'		=> 'large',
 						'scope'			=> $this->scope(),
 						'capabilities'	=> array( 'update_core' )
 					),
