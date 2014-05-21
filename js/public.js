@@ -39,6 +39,9 @@ jQuery( document ).ready( function( $ ) {
 		/** The ID base for the list elements (usually suffixed by "-n", denoting the initial sequence, starting with 1 */
 		this.id_base = ( typeof options.id_base != 'undefined' ) ? options.id_base : 'slide';
 
+		/** Full screen? */
+		this.fullscreen = this.el.hasClass( 'ps-fullscreen' );
+
 		/** Rotate type ( 'scroll' | 'fade' ) */
 		this.rotate_type = this.el.data( 'ps-rotate-type' );
 
@@ -73,14 +76,20 @@ jQuery( document ).ready( function( $ ) {
 			ss.list = ss.el.find( 'ul.ps-list' );
 			ss.width = ss.list.width();
 			ss.length = ss.list.children( 'li' ).length;
+			ss.start_slide = ss.get_url_param( 'ps' );
+			console.log( ss.start_slide );
 
 			// Initialize list width for scrolling slideshows
 			if ( ss.rotate_type == 'scroll' ) {
 				ss.list.width( this.width * this.length + 'px' );
 			}
 
-			// The first is current
-			ss.list.children( 'li:first-child' ).addClass( 'current' );
+			// The first is current unless query parameter used
+			if ( ! ss.start_slide ) {
+				ss.list.children( 'li:first-child' ).addClass( 'current' );
+			} else {
+				ss.list.children( 'li:nth-child(' + ss.start_slide + ')' ).addClass( 'current' );
+			}
 
 			// Nav arrows
 			ss.nav.append( '<div class="nav-arrows"><a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a></div>' );
@@ -137,6 +146,10 @@ jQuery( document ).ready( function( $ ) {
 				ss.autorotate_timer = setInterval( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 			}
 
+			// For fullscreen, position halfway down viewport
+			if ( ss.fullscreen ) {
+				ss.el.css( 'margin-top', ( ( $( window ).height() - ss.el.outerHeight() ) / 2 ) + 'px' );
+			}
 
 		},
 
@@ -354,6 +367,21 @@ jQuery( document ).ready( function( $ ) {
 			}
 
 			return parts[ i ];
+		},
+
+		/**
+		 * Parse query string
+		 *
+		 * @since	0.1
+		 * @link	http://stackoverflow.com/a/901144/1087660
+		 * @param	{string}	name
+		 * @return	{string}
+		 */
+		get_url_param: function( name ) {
+			name = name.replace( /[\[]/, "\\[" ).replace( /[\]]/, "\\]" );
+			var	regex = new RegExp( "[\\?&]" + name + "=([^&#]*)" ),
+				results = regex.exec( location.search );
+			return results == null ? "" : decodeURIComponent( results[1].replace( /\+/g, " " ) );
 		}
 
 	};

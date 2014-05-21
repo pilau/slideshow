@@ -92,6 +92,15 @@ class Pilau_Slideshow {
 	protected $image_size = null;
 
 	/**
+	 * Is the current slideshow full screen?
+	 *
+	 * @since    0.1
+	 *
+	 * @var      array
+	 */
+	protected $fullscreen = false;
+
+	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 * @since     0.1
@@ -310,6 +319,15 @@ class Pilau_Slideshow {
 	 */
 	public function set_settings( $settings ) {
 		return update_option( $this->plugin_slug . '_settings', $settings );
+	}
+
+	/**
+	 * Activate full screen mode
+	 *
+	 * @since    0.1
+	 */
+	public function activate_fullscreen() {
+		$this->fullscreen = true;
 	}
 
 	/**
@@ -562,25 +580,24 @@ class Pilau_Slideshow {
 		// Are we on a page with a slideshow?
 		if ( $this->slideshow_active ) {
 
-			// Work out proportions for height
+			// Work it out
 			$proportion = $this->image_size['height'] / $this->image_size['width'];
 			$half_proportional_height = $proportion * 100 / 2;
+			$width = $this->image_size['width'] . 'px';
 
 			// Output styles
 			?>
 
 			<style type="text/css">
 				.ps-slideshow .ps-wrapper {
-					width: <?php echo $this->image_size['width']; ?>px;
-					max-width: 100%;
-					height: 0;
+					width: <?php echo $width; ?>;
 					padding-top: <?php echo $half_proportional_height; ?>%;
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
 					background-color: #<?php echo $this->custom_fields['ps-rotate-fade-colour']; ?>;
 				}
 			</style>
 
-			<?php
+		<?php
 
 		}
 
@@ -600,6 +617,11 @@ class Pilau_Slideshow {
 			// Initialize classes and data attributes for main container element
 			$classes = array( 'ps-slideshow' );
 			$data_attributes = array();
+
+			// Full screen
+			if ( $this->fullscreen ) {
+				$classes[] = 'ps-fullscreen';
+			}
 
 			// Rotate type
 			if ( isset( $this->custom_fields['ps-rotate-type'] ) ) {
@@ -650,11 +672,11 @@ class Pilau_Slideshow {
 			?>
 
 			<div class="<?php echo implode( ' ', $classes ); ?>"<?php
-				if ( $data_attributes ) {
-					foreach ( $data_attributes as $key => $value ) {
-						echo ' data-' . $key . '="' . esc_attr( $value ) . '"';
-					}
+			if ( $data_attributes ) {
+				foreach ( $data_attributes as $key => $value ) {
+					echo ' data-' . $key . '="' . esc_attr( $value ) . '"';
 				}
+			}
 			?>>
 				<div class="ps-wrapper">
 					<ul class="ps-list">

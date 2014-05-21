@@ -24,6 +24,12 @@ In the templates for pages with slideshows, use the following to output the page
 	}
 	$PS->slideshow();
 
+To activate fullscreen mode, before outputting the slideshow:
+
+	$PS->activate_fullscreen();
+
+Slideshows can start from slides other than the first one by passing the `ps` query string parameter, set to the 1-based index of the slide.
+
 ## Filter hooks
 
 * `ps_scope` - Use to modify the scope for using slideshows (see the `scope` parameter for [Developer's Custom Fields](http://sltaylor.co.uk/wordpress/developers-custom-fields-docs/#functions-boxes-fields))

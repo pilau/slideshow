@@ -5,6 +5,8 @@
 .ps-slideshow .ps-wrapper {
   position: relative;
   overflow: hidden;
+  max-width: 100%;
+  height: 0;
 }
 .ps-slideshow .ps-wrapper ul.ps-list {
   position: absolute;
@@ -94,4 +96,7 @@
 }
 .ps-slideshow.ps-rotate-type-scroll .ps-wrapper ul.ps-list > li {
   float: left;
+}
+.ps-slideshow.ps-fullscreen .ps-wrapper {
+  width: 100%;
 }
