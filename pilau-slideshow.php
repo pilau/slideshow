@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Google Analytics Measurement Protocol
+ * Pilau Slideshow
  *
  * @package   Pilau_Slideshow
  * @author    Steve Taylor
