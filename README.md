@@ -34,4 +34,7 @@ Slideshows can start from slides other than the first one by passing the `ps` qu
 
 * `ps_scope` - Use to modify the scope for using slideshows (see the `scope` parameter for [Developer's Custom Fields](http://sltaylor.co.uk/wordpress/developers-custom-fields-docs/#functions-boxes-fields))
 * `ps_disable_default_css` - Use to disable the default CSS
+* `ps_custom_field_settings_box_args` - For altering the settings custom fields box arguments
+* `ps_custom_field_images_box_args` - For altering the images custom fields box arguments
 * `ps_slideshow_image_markup` - Use to alter the markup for each image; passes two parameters, the markup string and the image ID
+* `ps_mobile_breakpoint` - Change the mobile breakpoint, in pixels (default: 640)

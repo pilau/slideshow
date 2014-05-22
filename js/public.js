@@ -42,6 +42,9 @@ jQuery( document ).ready( function( $ ) {
 		/** Full screen? */
 		this.fullscreen = this.el.hasClass( 'ps-fullscreen' );
 
+		/** Mobile version ( 'show_all' | 'shrink' ) */
+		this.mobile_version = this.el.data( 'ps-mobile-version' );
+
 		/** Rotate type ( 'scroll' | 'fade' ) */
 		this.rotate_type = this.el.data( 'ps-rotate-type' );
 
@@ -73,11 +76,11 @@ jQuery( document ).ready( function( $ ) {
 		/** Initialize */
 		init: function() {
 			var ss = this; // So that ss can be used inside jQuery functions, where `this` refers to the selected element
+			var vw = $( window ).width(); // Viewport width
 			ss.list = ss.el.find( 'ul.ps-list' );
 			ss.width = ss.list.width();
 			ss.length = ss.list.children( 'li' ).length;
 			ss.start_slide = ss.get_url_param( 'ps' );
-			console.log( ss.start_slide );
 
 			// Initialize list width for scrolling slideshows
 			if ( ss.rotate_type == 'scroll' ) {
@@ -146,8 +149,8 @@ jQuery( document ).ready( function( $ ) {
 				ss.autorotate_timer = setInterval( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 			}
 
-			// For fullscreen, position halfway down viewport
-			if ( ss.fullscreen ) {
+			// For fullscreen above mobile, position halfway down viewport
+			if ( ss.fullscreen && vw >= pilau_slideshow.mobile_breakpoint ) {
 				ss.el.css( 'margin-top', ( ( $( window ).height() - ss.el.outerHeight() ) / 2 ) + 'px' );
 			}
 

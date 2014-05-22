@@ -101,6 +101,15 @@ class Pilau_Slideshow {
 	protected $fullscreen = false;
 
 	/**
+	 * Mobile breakpoint in pixels
+	 *
+	 * @since    0.1
+	 *
+	 * @var      array
+	 */
+	protected $mobile_breakpoint = null;
+
+	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 * @since     0.1
@@ -186,6 +195,9 @@ class Pilau_Slideshow {
 		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
 		load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
 
+		// Mobile breakpoint
+		$this->mobile_breakpoint = apply_filters( 'ps_mobile_breakpoint', 640 );
+
 	}
 
 	/**
@@ -264,7 +276,15 @@ class Pilau_Slideshow {
 	public function enqueue_scripts() {
 
 		if ( $this->slideshow_active ) {
+
+			// Enqueue script
 			wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'js/public.js', __FILE__ ), array( 'jquery' ), $this->version );
+
+			// Use localize to pass vars
+			wp_localize_script( $this->plugin_slug . '-plugin-script', 'pilau_slideshow', array(
+				'mobile_breakpoint' => $this->mobile_breakpoint
+			));
+
 		}
 
 	}
@@ -406,13 +426,14 @@ class Pilau_Slideshow {
 				$image_size_options[ $image_size ] = $image_size;
 			}
 
-			$args = apply_filters( 'ps_custom_field_box_args', array(
+			// Settings box
+			$args = apply_filters( 'ps_custom_field_settings_box_args', array(
 				'type'			=> 'post',
-				'title'			=> 'Slideshow',
-				'id'			=> 'pilau-slideshow-box',
+				'title'			=> 'Slideshow settings',
+				'id'			=> 'pilau-slideshow-settings-box',
 				'context'		=> 'normal',
 				'priority'		=> 'high',
-				'description'	=> __( 'To use the slideshow on this page, upload images through the <i>Add Media</i> button above the content editor, and select and order the ones you want to include below.', $this->plugin_slug ),
+				'description'	=> __( 'Adjust the settings for the slideshow here, and select and order the images to use below.', $this->plugin_slug ),
 				'fields'	=> array(
 					array(
 						'name'			=> 'ps-image-size',
@@ -424,25 +445,16 @@ class Pilau_Slideshow {
 						'capabilities'	=> array( 'update_core' )
 					),
 					array(
-						'name'					=> 'ps-images',
-						'label'					=> __( 'Images', $this->plugin_slug ),
-						'type'					=> 'checkboxes',
-						'multiple'				=> true,
-						'sortable'				=> true,
-						'checkboxes_thumbnail'	=> true,
-						'single'				=> false,
-						'options_type'			=> 'posts',
-						'options_query'			=> array(
-							'post_type'			=> 'attachment',
-							'post_status'		=> 'inherit',
-							'posts_per_page'	=> -1,
-							'post_parent'		=> '[OBJECT_ID]',
-							'post_mime_type'	=> 'image',
-							'orderby'			=> 'title',
-							'order'				=> 'ASC'
+						'name'			=> 'ps-mobile-version',
+						'label'			=> __( 'Mobile version', $this->plugin_slug ),
+						'options'		=> array(
+							__( 'Show all images', $this->plugin_slug )		=> 'show_all',
+							__( 'Shrink slideshow', $this->plugin_slug ) 	=> 'shrink'
 						),
-						'scope'					=> $this->scope(),
-						'capabilities'			=> array( 'edit_posts', 'edit_pages' )
+						'type'			=> 'radio',
+						'default'		=> 'show_all',
+						'scope'			=> $this->scope(),
+						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
 					),
 					array(
 						'name'			=> 'ps-rotate-type',
@@ -522,7 +534,41 @@ class Pilau_Slideshow {
 					),
 				)
 			));
+			slt_cf_register_box( $args );
 
+			// Images box
+			$args = apply_filters( 'ps_custom_field_images_box_args', array(
+				'type'			=> 'post',
+				'title'			=> 'Slideshow images',
+				'id'			=> 'pilau-slideshow-images-box',
+				'context'		=> 'normal',
+				'priority'		=> 'high',
+				'description'	=> __( 'Upload images through the <i>Add Media</i> button above the content editor, and select and order the ones you want to include below.', $this->plugin_slug ),
+				'fields'	=> array(
+					array(
+						'name'					=> 'ps-images',
+						'label'					=> __( 'Images', $this->plugin_slug ),
+						'hide_label'			=> true,
+						'type'					=> 'checkboxes',
+						'multiple'				=> true,
+						'sortable'				=> true,
+						'checkboxes_thumbnail'	=> true,
+						'single'				=> false,
+						'options_type'			=> 'posts',
+						'options_query'			=> array(
+							'post_type'			=> 'attachment',
+							'post_status'		=> 'inherit',
+							'posts_per_page'	=> -1,
+							'post_parent'		=> '[OBJECT_ID]',
+							'post_mime_type'	=> 'image',
+							'orderby'			=> 'title',
+							'order'				=> 'ASC'
+						),
+						'scope'					=> $this->scope(),
+						'capabilities'			=> array( 'edit_posts', 'edit_pages' )
+					),
+				)
+			));
 			slt_cf_register_box( $args );
 
 		}
@@ -595,6 +641,28 @@ class Pilau_Slideshow {
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
 					background-color: #<?php echo $this->custom_fields['ps-rotate-fade-colour']; ?>;
 				}
+				<?php if ( $this->custom_fields['ps-mobile-version'] == 'show_all' ) { ?>
+				@media only screen and ( max-width: <?php echo $this->mobile_breakpoint - 1; ?>px ) {
+					.ps-slideshow .ps-wrapper {
+						padding: 0;
+						background-color: transparent;
+						overflow: visible;
+						height: auto;
+					}
+					.ps-slideshow .ps-wrapper .ps-list {
+						position: static !important;
+					}
+					.ps-slideshow .ps-wrapper .ps-list li.slide {
+						display: block !important;
+						position: static !important;
+						margin-bottom: 20px;
+						height: auto !important;
+					}
+					.ps-slideshow .ps-wrapper .nav-arrows {
+						display: none !important;
+					}
+				}
+				<?php } ?>
 			</style>
 
 		<?php
@@ -621,6 +689,11 @@ class Pilau_Slideshow {
 			// Full screen
 			if ( $this->fullscreen ) {
 				$classes[] = 'ps-fullscreen';
+			}
+
+			// Mobile version
+			if ( isset( $this->custom_fields['ps-mobile-version'] ) && $this->custom_fields['ps-mobile-version'] ) {
+				$data_attributes['ps-mobile-version'] = $this->custom_fields['ps-mobile-version'];
 			}
 
 			// Rotate type

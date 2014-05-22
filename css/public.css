@@ -100,3 +100,7 @@
 .ps-slideshow.ps-fullscreen .ps-wrapper {
   width: 100%;
 }
+.ps-slideshow.ps-fullscreen .ps-wrapper .ps-list .slide img {
+  width: 100%;
+  height: auto;
+}
