@@ -763,8 +763,9 @@ class Pilau_Slideshow {
 							// Initialize classes for li
 							$li_classes = array( 'slide' );
 
-							// Get image src and size
-							$image_infos = wp_get_attachment_image_src( $image_id, $this->image_size['name'] );
+							// Get image infos
+							$image_size = $this->fullscreen ? 'full' : $this->image_size['name'];
+							$image_infos = wp_get_attachment_image_src( $image_id, $image_size );
 
 							if ( $image_infos ) {
 
