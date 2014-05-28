@@ -10,8 +10,8 @@
  *
  * @wordpress-plugin
  * Plugin Name:			Pilau Slideshow
- * Description:			A JavaScript-driven slideshow plugin for WordPress.
- * Version:				0.1
+ * Description:			A jQuery-driven slideshow plugin for WordPress.
+ * Version:				0.2
  * Author:				Steve Taylor
  * Text Domain:			pilau-slideshow-locale
  * License:				GPL-2.0+

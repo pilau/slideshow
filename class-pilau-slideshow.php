@@ -23,7 +23,7 @@ class Pilau_Slideshow {
 	 *
 	 * @var     string
 	 */
-	protected $version = '0.1';
+	protected $version = '0.2';
 
 	/**
 	 * Unique identifier for your plugin.

@@ -1,9 +1,3 @@
-/**
- * Slideshow
- *
- * @version		0.1
- */
-
 
 /* Trigger when DOM has loaded */
 jQuery( document ).ready( function( $ ) {
@@ -140,13 +134,13 @@ jQuery( document ).ready( function( $ ) {
 			} ).on( 'mouseout', function() {
 				// If only a pause was flagged, restart autorotating if appropriate
 				if ( ss.el.hasClass( 'ps-autorotate' ) && ss.autorotate_hover == 'pause' ) {
-					ss.autorotate_timer = setInterval( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
+					ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 				}
 			});
 
 			// Initiate autorotate?
 			if ( ss.autorotate ) {
-				ss.autorotate_timer = setInterval( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
+				ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 			}
 
 			// For fullscreen above mobile, position halfway down viewport
@@ -328,15 +322,22 @@ jQuery( document ).ready( function( $ ) {
 		},
 
 		/**
-		 * Do rotate callback if possible
+		 * Do rotate callback
 		 *
 		 * @since	0.1
 		 */
 		do_rotate_callback: function() {
+			var ss = this;
 			var cb;
 
-			if ( this.rotate_callback !== null ) {
-				cb = window[ this.rotate_callback ];
+			// Continue autorotate?
+			if ( ss.autorotate ) {
+				ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
+			}
+
+			// Custom callback if present
+			if ( ss.rotate_callback !== null ) {
+				cb = window[ ss.rotate_callback ];
 				if ( typeof cb === 'function' ) {
 					cb();
 				}

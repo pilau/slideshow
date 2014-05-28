@@ -1,7 +1,7 @@
 Pilau Slideshow
 =========
 
-A JavaScript-driven slideshow plugin for WordPress.
+A jQuery-driven slideshow plugin for WordPress.
 
 **NOTE:** Depends on the [Developer's Custom Fields](https://github.com/gyrus/WordPress-Developers-Custom-Fields) plugin.
 
