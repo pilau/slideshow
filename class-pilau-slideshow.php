@@ -454,7 +454,7 @@ class Pilau_Slideshow {
 						'type'			=> 'radio',
 						'default'		=> 'show_all',
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-rotate-type',
@@ -467,7 +467,7 @@ class Pilau_Slideshow {
 						),
 						'default'		=> 'fade',
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-rotate-fade-type',
@@ -479,7 +479,7 @@ class Pilau_Slideshow {
 						),
 						'default'		=> 'crossfade',
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-rotate-fade-colour',
@@ -487,7 +487,7 @@ class Pilau_Slideshow {
 						'type'			=> 'colorpicker',
 						'default'		=> 'ffffff',
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-rotate-speed',
@@ -498,7 +498,7 @@ class Pilau_Slideshow {
 						'default'		=> '500',
 						'width'			=> 8,
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-autorotate',
@@ -507,7 +507,7 @@ class Pilau_Slideshow {
 						'description'	=> __( 'Start automatic rotation when page loads?', $this->plugin_slug ),
 						'default'		=> false,
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-autorotate-interval',
@@ -518,7 +518,7 @@ class Pilau_Slideshow {
 						'default'		=> '5000',
 						'width'			=> 10,
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-hover-behaviour',
@@ -530,7 +530,7 @@ class Pilau_Slideshow {
 						),
 						'default'		=> 'pause',
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 				)
 			));
@@ -565,7 +565,7 @@ class Pilau_Slideshow {
 							'order'				=> 'ASC'
 						),
 						'scope'					=> $this->scope(),
-						'capabilities'			=> array( 'edit_posts', 'edit_pages' )
+						'capabilities'			=> array( 'manage_options' )
 					),
 				)
 			));
