@@ -448,8 +448,9 @@ class Pilau_Slideshow {
 						'name'			=> 'ps-mobile-version',
 						'label'			=> __( 'Mobile version', $this->plugin_slug ),
 						'options'		=> array(
-							__( 'Show all images', $this->plugin_slug )		=> 'show_all',
-							__( 'Shrink slideshow', $this->plugin_slug ) 	=> 'shrink'
+							__( 'Show all slides', $this->plugin_slug )			=> 'show_all',
+							__( 'Show first slide only', $this->plugin_slug ) 	=> 'show_first',
+							__( 'Shrink slideshow', $this->plugin_slug ) 		=> 'shrink',
 						),
 						'type'			=> 'radio',
 						'default'		=> 'show_all',
@@ -641,27 +642,35 @@ class Pilau_Slideshow {
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
 					background-color: #<?php echo $this->custom_fields['ps-rotate-fade-colour']; ?>;
 				}
-				<?php if ( $this->custom_fields['ps-mobile-version'] == 'show_all' ) { ?>
-				@media only screen and ( max-width: <?php echo $this->mobile_breakpoint - 1; ?>px ) {
-					.ps-slideshow .ps-wrapper {
-						padding: 0;
-						background-color: transparent;
-						overflow: visible;
-						height: auto;
+				<?php if ( $this->custom_fields['ps-mobile-version'] != 'shrink' ) { ?>
+					@media only screen and ( max-width: <?php echo $this->mobile_breakpoint - 1; ?>px ) {
+						.ps-slideshow .ps-wrapper {
+							padding: 0;
+							background-color: transparent;
+							overflow: visible;
+							height: auto;
+						}
+						.ps-slideshow .ps-wrapper .ps-list {
+							position: static !important;
+						}
+						.ps-slideshow .ps-wrapper .ps-list li.slide {
+							display: block !important;
+							position: static !important;
+							margin-bottom: 20px;
+							height: auto !important;
+						}
+						<?php if ( $this->custom_fields['ps-mobile-version'] == 'show_first' ) { ?>
+							.ps-slideshow .ps-wrapper .ps-list li.slide {
+								display: none !important;
+							}
+							.ps-slideshow .ps-wrapper .ps-list li.slide:first-child {
+								display: block !important;
+							}
+						<?php } ?>
+						.ps-slideshow .ps-wrapper .nav-arrows {
+							display: none !important;
+						}
 					}
-					.ps-slideshow .ps-wrapper .ps-list {
-						position: static !important;
-					}
-					.ps-slideshow .ps-wrapper .ps-list li.slide {
-						display: block !important;
-						position: static !important;
-						margin-bottom: 20px;
-						height: auto !important;
-					}
-					.ps-slideshow .ps-wrapper .nav-arrows {
-						display: none !important;
-					}
-				}
 				<?php } ?>
 			</style>
 
