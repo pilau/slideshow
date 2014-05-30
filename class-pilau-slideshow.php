@@ -138,6 +138,7 @@ class Pilau_Slideshow {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_action( 'init', array( $this, 'register_custom_fields' ) );
+		add_filter( 'slt_cf_init_boxes', array( $this, 'slt_cf_init_boxes' ) );
 		add_action( 'template_redirect', array( $this, 'output_init' ) );
 		add_action( 'wp_head', array( $this, 'dynamic_css' ) );
 
@@ -436,11 +437,27 @@ class Pilau_Slideshow {
 				'description'	=> __( 'Adjust the settings for the slideshow here, and select and order the images to use below.', $this->plugin_slug ),
 				'fields'	=> array(
 					array(
+						'name'			=> 'ps-slideshow-type',
+						'label'			=> __( 'Slideshow type', $this->plugin_slug ),
+						'options'		=> array(
+							__( 'Just images', $this->plugin_slug )						=> 'images',
+							__( 'Images with titles', $this->plugin_slug ) 				=> 'images_titles',
+							__( 'Images with titles and captions', $this->plugin_slug ) => 'images_titles_captions',
+							__( 'Custom slides', $this->plugin_slug )				 	=> 'custom',
+						),
+						'type'			=> 'select',
+						'default'		=> 'images',
+						'description'	=> __( "If custom slides are being used, make sure to use the <code>ps_custom_slides</code> filter to supply the slides markup.", $this->plugin_slug ),
+						'scope'			=> $this->scope(),
+						'capabilities'	=> array( 'update_core' )
+					),
+					array(
 						'name'			=> 'ps-image-size',
 						'label'			=> __( 'Image size', $this->plugin_slug ),
 						'options'		=> $image_size_options,
 						'type'			=> 'select',
 						'default'		=> 'large',
+						'description'	=> __( "If custom slides are being used, even if slides contain something other than an image covering the whole slide space, this should still be set to an image size that corresponds to the slide size.", $this->plugin_slug ),
 						'scope'			=> $this->scope(),
 						'capabilities'	=> array( 'update_core' )
 					),
@@ -577,6 +594,28 @@ class Pilau_Slideshow {
 	}
 
 	/**
+	 * Filter the DCF boxes array
+	 *
+	 * @since	0.2
+	 * @return	array
+	 */
+	public function slt_cf_init_boxes( $boxes ) {
+		global $post;
+
+		// Check for default images box and remove if using custom slides
+		if ( is_admin() && is_object( $post ) && isset( $post->ID ) && slt_cf_field_value( 'ps-image-size', 'post', $post->ID ) == 'custom-slides' ) {
+			foreach ( $boxes as $key => $box ) {
+				if ( $box['id'] == 'pilau-slideshow-images-box' ) {
+					unset( $boxes[ $key ] );
+					break;
+				}
+			}
+		}
+
+		return $boxes;
+	}
+
+	/**
 	 * Initialize for output on the frontend
 	 *
 	 * @since	0.1
@@ -642,6 +681,10 @@ class Pilau_Slideshow {
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
 					background-color: #<?php echo $this->custom_fields['ps-rotate-fade-colour']; ?>;
 				}
+				.ps-slideshow .ps-wrapper .ps-list {
+					padding-top: <?php echo $half_proportional_height; ?>%;
+					padding-bottom: <?php echo $half_proportional_height; ?>%;
+				}
 				<?php if ( $this->custom_fields['ps-mobile-version'] != 'shrink' ) { ?>
 					@media only screen and ( max-width: <?php echo $this->mobile_breakpoint - 1; ?>px ) {
 						.ps-slideshow .ps-wrapper {
@@ -652,6 +695,7 @@ class Pilau_Slideshow {
 						}
 						.ps-slideshow .ps-wrapper .ps-list {
 							position: static !important;
+							padding: 0;
 						}
 						.ps-slideshow .ps-wrapper .ps-list li.slide {
 							display: block !important;
@@ -692,12 +736,17 @@ class Pilau_Slideshow {
 		if ( $this->slideshow_active ) {
 
 			// Initialize classes and data attributes for main container element
-			$classes = array( 'ps-slideshow' );
+			$slideshow_classes = array( 'ps-slideshow' );
 			$data_attributes = array();
 
 			// Full screen
 			if ( $this->fullscreen ) {
-				$classes[] = 'ps-fullscreen';
+				$slideshow_classes[] = 'ps-fullscreen';
+			}
+
+			// Slideshow type
+			if ( isset( $this->custom_fields['ps-slideshow-type'] ) && $this->custom_fields['ps-slideshow-type'] ) {
+				$data_attributes['ps-slideshow-type'] = $this->custom_fields['ps-slideshow-type'];
 			}
 
 			// Mobile version
@@ -708,7 +757,7 @@ class Pilau_Slideshow {
 			// Rotate type
 			if ( isset( $this->custom_fields['ps-rotate-type'] ) ) {
 
-				$classes[] = 'ps-rotate-type-' . $this->custom_fields['ps-rotate-type'];
+				$slideshow_classes[] = 'ps-rotate-type-' . $this->custom_fields['ps-rotate-type'];
 				$data_attributes['ps-rotate-type'] = $this->custom_fields['ps-rotate-type'];
 
 				if ( $this->custom_fields['ps-rotate-type'] == 'fade' ) {
@@ -716,7 +765,7 @@ class Pilau_Slideshow {
 					// Fade type
 					if ( isset( $this->custom_fields['ps-rotate-fade-type'] ) ) {
 
-						$classes[] = 'ps-rotate-fade-type-' . $this->custom_fields['ps-rotate-fade-type'];
+						$slideshow_classes[] = 'ps-rotate-fade-type-' . $this->custom_fields['ps-rotate-fade-type'];
 						$data_attributes['ps-rotate-fade-type'] = $this->custom_fields['ps-rotate-fade-type'];
 
 						// Crossfade
@@ -737,7 +786,7 @@ class Pilau_Slideshow {
 
 			// Autorotate
 			if ( isset( $this->custom_fields['ps-autorotate'] ) && $this->custom_fields['ps-autorotate'] ) {
-				$classes[] = 'ps-autorotate';
+				$slideshow_classes[] = 'ps-autorotate';
 			}
 
 			// Autorotate interval
@@ -747,59 +796,86 @@ class Pilau_Slideshow {
 
 			// Hover behaviour
 			if ( isset( $this->custom_fields['ps-hover-behaviour'] ) ) {
-				$classes[] = 'ps-hover-behaviour-' . $this->custom_fields['ps-hover-behaviour'];
+				$slideshow_classes[] = 'ps-hover-behaviour-' . $this->custom_fields['ps-hover-behaviour'];
 				$data_attributes['ps-hover-behaviour'] = $this->custom_fields['ps-hover-behaviour'];
+			}
+
+			// Get the slides
+			$slides = array();
+			if ( $this->custom_fields['ps-slideshow-type'] == 'custom' ) {
+
+				// Get custom slides via filter
+				$slides = apply_filters( 'ps_custom_slides', $slides, $this );
+
+			} else {
+
+				// Build slides from images
+				foreach ( $this->custom_fields['ps-images'] as $image_id ) {
+
+					// Get image infos
+					$image_size = $this->fullscreen ? 'full' : $this->image_size['name'];
+					$image_infos = wp_get_attachment_image_src( $image_id, $image_size );
+
+					if ( $image_infos ) {
+
+						// Construct markup
+						$slide_markup = '<figure>';
+						$slide_markup .= '<img src="' . $image_infos[0] . '" width="' . $image_infos[1] . '" height="' . $image_infos[2] . '" alt="' . get_the_title( $image_id ) . '">';
+						if ( in_array( $this->custom_fields['ps-slideshow-type'], array( 'images_titles', 'images_titles_captions' ) ) ) {
+							$image_post = get_post( $image_id );
+							$slide_markup .= '<figcaption class="text">';
+							$slide_markup .= '<h2 class="title">' . apply_filters( 'the_title', $image_post->post_title ) . '</h2>';
+							if ( $this->custom_fields['ps-slideshow-type'] == 'images_titles_captions' ) {
+								$slide_markup .= '<p class="caption">' . apply_filters( 'get_the_excerpt', $image_post->post_excerpt ) . '</p>';
+							}
+							$slide_markup .= '</figcaption>';
+						}
+						$slide_markup .= '</figure>';
+						$slides[ $image_id ] = apply_filters( 'ps_slideshow_image_markup', $slide_markup, $image_id );
+
+					}
+
+				}
+
 			}
 
 			?>
 
-			<div class="<?php echo implode( ' ', $classes ); ?>"<?php
-			if ( $data_attributes ) {
-				foreach ( $data_attributes as $key => $value ) {
-					echo ' data-' . $key . '="' . esc_attr( $value ) . '"';
+			<?php if ( $slides ) { ?>
+
+				<aside class="<?php echo implode( ' ', $slideshow_classes ); ?>"<?php
+				if ( $data_attributes ) {
+					foreach ( $data_attributes as $key => $value ) {
+						echo ' data-' . $key . '="' . esc_attr( $value ) . '"';
+					}
 				}
-			}
-			?>>
-				<div class="ps-wrapper">
-					<ul class="ps-list">
+				?>>
+					<div class="ps-wrapper">
+						<ul class="ps-list">
 
-						<?php $i = 1; ?>
+							<?php $i = 1; ?>
 
-						<?php foreach ( $this->custom_fields['ps-images'] as $image_id ) { ?>
-
-							<?php
-
-							// Initialize classes for li
-							$li_classes = array( 'slide' );
-
-							// Get image infos
-							$image_size = $this->fullscreen ? 'full' : $this->image_size['name'];
-							$image_infos = wp_get_attachment_image_src( $image_id, $image_size );
-
-							if ( $image_infos ) {
-
-								// Construct markup
-								$image_markup = apply_filters( 'ps_slideshow_image_markup', '<img src="' . $image_infos[0] . '" width="' . $image_infos[1] . '" height="' . $image_infos[2] . '" alt="' . get_the_title( $image_id ) . '">' );
-
-								?>
-
-								<li class="<?php echo implode( ' ', $li_classes ); ?>" id="slide-<?php echo $i; ?>">
-									<?php echo $image_markup; ?>
-								</li>
+							<?php foreach ( $slides as $slide_id => $slide_markup ) { ?>
 
 								<?php
 
-								$i++;
+								// Slide classes
+								$slide_classes = array( 'slide' );
+								$slide_classes = apply_filters( 'ps_slide_classes', $slide_classes, $slide_id );
 
-							}
+								?>
 
-							?>
+								<li class="<?php echo implode( ' ', $slide_classes ); ?>" id="slide-<?php echo $i; ?>"><?php echo $slide_markup; ?></li>
 
-						<?php } ?>
+								<?php $i++; ?>
 
-					</ul>
-				</div>
-			</div>
+							<?php } ?>
+
+						</ul>
+					</div>
+				</aside>
+
+			<?php } ?>
 
 		<?php
 
