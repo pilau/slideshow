@@ -439,6 +439,7 @@ class Pilau_Slideshow {
 					array(
 						'name'			=> 'ps-slideshow-type',
 						'label'			=> __( 'Slideshow type', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
 						'options'		=> array(
 							__( 'Just images', $this->plugin_slug )						=> 'images',
 							__( 'Images with titles', $this->plugin_slug ) 				=> 'images_titles',
@@ -454,10 +455,24 @@ class Pilau_Slideshow {
 					array(
 						'name'			=> 'ps-image-size',
 						'label'			=> __( 'Image size', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
 						'options'		=> $image_size_options,
 						'type'			=> 'select',
 						'default'		=> 'large',
 						'description'	=> __( "If custom slides are being used, even if slides contain something other than an image covering the whole slide space, this should still be set to an image size that corresponds to the slide size.", $this->plugin_slug ),
+						'scope'			=> $this->scope(),
+						'capabilities'	=> array( 'update_core' )
+					),
+					array(
+						'name'			=> 'ps-nav-linking',
+						'label'			=> __( 'Navigation linking', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
+						'options'		=> array(
+							__( 'Make each half of slideshow clickable', $this->plugin_slug )	=> 'half',
+							__( 'Make only arrows clickable', $this->plugin_slug )				=> 'arrows_only',
+						),
+						'type'			=> 'select',
+						'default'		=> 'half',
 						'scope'			=> $this->scope(),
 						'capabilities'	=> array( 'update_core' )
 					),
@@ -510,6 +525,7 @@ class Pilau_Slideshow {
 					array(
 						'name'			=> 'ps-rotate-speed',
 						'label'			=> __( 'Rotate speed', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
 						'type'			=> 'text',
 						'description'	=> __( 'For fading rotation that crossfades and scrolling rotation, this will be the duration of the crossfade or scroll. For fading through a colour, this will be the duration of the fade out as well as the duration of the fade in.', $this->plugin_slug ),
 						'input_suffix'	=> ' ' . __( 'milliseconds', $this->plugin_slug ),
@@ -530,6 +546,7 @@ class Pilau_Slideshow {
 					array(
 						'name'			=> 'ps-autorotate-interval',
 						'label'			=> __( 'Auto-rotate interval', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
 						'type'			=> 'text',
 						'description'	=> __( 'How long to pause on each slide during auto-rotation.', $this->plugin_slug ),
 						'input_suffix'	=> ' ' . __( 'milliseconds', $this->plugin_slug ),
@@ -747,6 +764,12 @@ class Pilau_Slideshow {
 			// Slideshow type
 			if ( isset( $this->custom_fields['ps-slideshow-type'] ) && $this->custom_fields['ps-slideshow-type'] ) {
 				$data_attributes['ps-slideshow-type'] = $this->custom_fields['ps-slideshow-type'];
+			}
+
+			// Nav linking
+			if ( isset( $this->custom_fields['ps-nav-linking'] ) && $this->custom_fields['ps-nav-linking'] ) {
+				$slideshow_classes[] = 'ps-nav-linking-' . $this->custom_fields['ps-nav-linking'];
+				$data_attributes['ps-nav-linking'] = $this->custom_fields['ps-nav-linking'];
 			}
 
 			// Mobile version

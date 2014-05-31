@@ -7,6 +7,10 @@ A jQuery-driven slideshow plugin for WordPress.
 
 **NOTE:** Currently only slideshows with the `fade` rotate type are responsive.
 
+## Installation
+
+Note that the plugin folder should be named `slideshow`. This is because if the [GitHub Updater plugin](https://github.com/afragen/github-updater) is used to update this plugin, if the folder is named something other than this, it will get deleted, and the updated plugin folder with a different name will cause the plugin to be silently deactivated. Also, the folder name is hard-coded in the plugin's CSS.
+
 ## Basic use
 
 Add a filter to your theme to specify which pages slideshows will apply to (see the `scope` parameter for [Developer's Custom Fields](http://sltaylor.co.uk/wordpress/developers-custom-fields-docs/#functions-boxes-fields)):
