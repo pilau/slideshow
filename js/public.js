@@ -89,26 +89,26 @@ jQuery( document ).ready( function( $ ) {
 			}
 
 			// Nav arrows
-			ss.nav.append( '<div class="nav-arrows"><a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a></div>' );
-			ss.el.on( 'mouseenter', '.nav-arrows', function() {
+			ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
+			ss.el.on( 'mouseenter', function() {
 				var el = $( this );
 
 				// Fade nav arrows in
-				if ( ! el.hasClass( 'ps-fading-out' ) ) {
-					el.addClass( 'ps-fading-in' );
-					$( this ).animate({ opacity: 1 }, 200, function() {
-						el.removeClass( 'ps-fading-in' );
+				if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
+					el.addClass( 'ps-fading-nav-in' );
+					el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
+						el.removeClass( 'ps-fading-nav-in' );
 					});
 				}
 
-			}).on( 'mouseleave', '.nav-arrows', function() {
+			}).on( 'mouseleave', function() {
 				var el = $( this );
 
 				// Fade nav arrows out
-				if ( ! el.hasClass( 'ps-fading-in' ) ) {
-					el.addClass( 'ps-fading-out' );
-					$( this ).animate({ opacity: 0 }, 200, function() {
-						el.removeClass( 'ps-fading-out' );
+				if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
+					el.addClass( 'ps-fading-nav-out' );
+					el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
+						el.removeClass( 'ps-fading-nav-out' );
 					});
 				}
 

@@ -684,16 +684,15 @@ class Pilau_Slideshow {
 		if ( $this->slideshow_active ) {
 
 			// Work it out
-			$proportion = $this->image_size['height'] / $this->image_size['width'];
-			$half_proportional_height = $proportion * 100 / 2;
-			$width = $this->image_size['width'] . 'px';
+			$proportional_height = ( $this->image_size['height'] / $this->image_size['width'] ) * 100;
+			$half_proportional_height = $proportional_height / 2;
 
 			// Output styles
 			?>
 
 			<style type="text/css">
 				.ps-slideshow .ps-wrapper {
-					width: <?php echo $width; ?>;
+					width: <?php echo $this->image_size['width']; ?>px;
 					padding-top: <?php echo $half_proportional_height; ?>%;
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
 					background-color: #<?php echo $this->custom_fields['ps-rotate-fade-colour']; ?>;
@@ -701,6 +700,11 @@ class Pilau_Slideshow {
 				.ps-slideshow .ps-wrapper .ps-list {
 					padding-top: <?php echo $half_proportional_height; ?>%;
 					padding-bottom: <?php echo $half_proportional_height; ?>%;
+				}
+				.ps-slideshow.ps-nav-linking-half a.nav {
+					padding-top: <?php echo $half_proportional_height; ?>%;
+					padding-bottom: <?php echo $half_proportional_height; ?>%;
+					margin-top: -<?php echo $half_proportional_height; ?>%;
 				}
 				<?php if ( $this->custom_fields['ps-mobile-version'] != 'shrink' ) { ?>
 					@media only screen and ( max-width: <?php echo $this->mobile_breakpoint - 1; ?>px ) {
@@ -728,7 +732,7 @@ class Pilau_Slideshow {
 								display: block !important;
 							}
 						<?php } ?>
-						.ps-slideshow .ps-wrapper .nav-arrows {
+						.ps-slideshow .ps-wrapper a.nav {
 							display: none !important;
 						}
 					}

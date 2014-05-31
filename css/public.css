@@ -38,50 +38,70 @@
 .ps-slideshow .ps-wrapper ul.ps-list > li .text .caption {
   font-size: .9em;
 }
-.ps-slideshow .ps-wrapper .nav-arrows {
-  position: absolute;
-  z-index: 9999;
-  opacity: 0;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.ps-slideshow .ps-wrapper .nav-arrows a.nav {
-  position: relative;
+.ps-slideshow .ps-wrapper a.nav {
   display: block;
-  width: 50%;
-  height: 100%;
+  opacity: 0;
+  z-index: 100;
 }
-.ps-slideshow .ps-wrapper .nav-arrows a.nav .arrow {
-  position: absolute;
-  top: 50%;
-  margin-top: -17px;
+.ps-slideshow .ps-wrapper a.nav .arrow {
+  display: block;
   height: 34px;
   width: 34px;
   background: url('/wp-content/plugins/slideshow/assets/sprites.png?v=1') no-repeat 0 0;
   overflow: hidden;
   text-indent: -9999px;
 }
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous {
-  float: left;
-}
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous .arrow {
-  left: 20px;
-}
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous:hover .arrow,
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.previous:focus .arrow {
+.ps-slideshow .ps-wrapper a.nav.previous:hover .arrow,
+.ps-slideshow .ps-wrapper a.nav.previous:focus .arrow {
   background-position: 0 -50px;
 }
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.next {
-  float: right;
-}
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.next .arrow {
-  right: 20px;
+.ps-slideshow .ps-wrapper a.nav.next .arrow {
   background-position: -50px 0;
 }
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.next:hover .arrow,
-.ps-slideshow .ps-wrapper .nav-arrows a.nav.next:focus .arrow {
+.ps-slideshow .ps-wrapper a.nav.next:hover .arrow,
+.ps-slideshow .ps-wrapper a.nav.next:focus .arrow {
+  background-position: -50px -50px;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav {
+  position: relative;
+  width: 50%;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav .arrow {
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav.previous {
+  float: left;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav.previous .arrow {
+  left: 20px;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav.next {
+  float: right;
+}
+.ps-slideshow.ps-nav-linking-half .ps-wrapper a.nav.next .arrow {
+  right: 20px;
+}
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav {
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  height: 34px;
+  width: 34px;
+}
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.previous {
+  left: 20px;
+}
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.next {
+  right: 20px;
+}
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.previous:hover .arrow,
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.previous:focus .arrow {
+  background-position: 0 -50px;
+}
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.next:hover .arrow,
+.ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.next:focus .arrow {
   background-position: -50px -50px;
 }
 .ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list {
