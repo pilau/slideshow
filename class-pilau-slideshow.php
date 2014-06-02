@@ -880,6 +880,11 @@ class Pilau_Slideshow {
 
 			}
 
+			// Only one slide?
+			if ( count( $slides ) == 1 ) {
+				$slideshow_classes[] = 'ps-one-slide';
+			}
+
 			?>
 
 			<?php if ( $slides ) { ?>

@@ -104,6 +104,9 @@
 .ps-slideshow.ps-nav-linking-arrows_only .ps-wrapper a.nav.next:focus .arrow {
   background-position: -50px -50px;
 }
+.ps-slideshow.ps-show-nav .ps-wrapper a.nav {
+  opacity: 1;
+}
 .ps-slideshow.ps-rotate-type-fade .ps-wrapper ul.ps-list {
   width: 100%;
 }

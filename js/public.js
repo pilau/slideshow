@@ -91,52 +91,59 @@ jQuery( document ).ready( function( $ ) {
 				ss.list.children( 'li:nth-child(' + ss.start_slide + ')' ).addClass( 'current' );
 			}
 
-			// Nav arrows
-			ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
-			if ( ! ss.show_nav ) {
+			// Nav arrows?
+			if ( ! ss.el.hasClass( 'ps-one-slide' ) ) {
 
-				// Fade nav in or out
-				ss.el.on( 'mouseenter', function() {
+				// Append arrows
+				ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
+
+				// If nav is hidden to begin, we need fading
+				if ( ! ss.show_nav ) {
+
+					// Fade nav in or out
+					ss.el.on( 'mouseenter', function() {
+						var el = $( this );
+
+						// Fade nav arrows in
+						if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
+							el.addClass( 'ps-fading-nav-in' );
+							el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
+								el.removeClass( 'ps-fading-nav-in' );
+							});
+						}
+
+					}).on( 'mouseleave', function() {
+						var el = $( this );
+
+						// Fade nav arrows out
+						if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
+							el.addClass( 'ps-fading-nav-out' );
+							el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
+								el.removeClass( 'ps-fading-nav-out' );
+							});
+						}
+
+					});
+
+				}
+
+				// Nav click event
+				ss.el.on( 'click', 'a.nav', function( e ) {
+					e.preventDefault();
 					var el = $( this );
 
-					// Fade nav arrows in
-					if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
-						el.addClass( 'ps-fading-nav-in' );
-						el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
-							el.removeClass( 'ps-fading-nav-in' );
-						});
-					}
+					// Completely stop rotating
+					ss.stop();
 
-				}).on( 'mouseleave', function() {
-					var el = $( this );
-
-					// Fade nav arrows out
-					if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
-						el.addClass( 'ps-fading-nav-out' );
-						el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
-							el.removeClass( 'ps-fading-nav-out' );
-						});
+					if ( ! el.hasClass( 'disabled' ) ) {
+						// Temporarily disable both nav links
+						ss.nav.find( 'a.nav' ).addClass( 'disabled' );
+						ss.rotate( el.hasClass( 'previous' ) ? 'previous' : 'next' );
 					}
 
 				});
 
 			}
-
-			// Nav click event
-			ss.el.on( 'click', 'a.nav', function( e ) {
-				e.preventDefault();
-				var el = $( this );
-
-				// Completely stop rotating
-				ss.stop();
-
-				if ( ! el.hasClass( 'disabled' ) ) {
-					// Temporarily disable both nav links
-					ss.nav.find( 'a.nav' ).addClass( 'disabled' );
-					ss.rotate( el.hasClass( 'previous' ) ? 'previous' : 'next' );
-				}
-
-			});
 
 			// Hover anywhere on slideshow
 			ss.el.on( 'mouseover', function() {
