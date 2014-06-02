@@ -483,7 +483,7 @@ class Pilau_Slideshow {
 						'type'			=> 'checkbox',
 						'default'		=> false,
 						'scope'			=> $this->scope(),
-						'capabilities'	=> array( 'update_core' )
+						'capabilities'	=> array( 'manage_options' )
 					),
 					array(
 						'name'			=> 'ps-mobile-version',
