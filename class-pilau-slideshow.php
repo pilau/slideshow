@@ -464,6 +464,20 @@ class Pilau_Slideshow {
 						'capabilities'	=> array( 'update_core' )
 					),
 					array(
+						'name'			=> 'ps-indicator',
+						'label'			=> __( 'Indicator', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
+						'options'		=> array(
+							__( 'No indicator', $this->plugin_slug )		=> 'no',
+							__( 'Plain indicator', $this->plugin_slug )		=> 'plain',
+							__( 'Linked indicator', $this->plugin_slug )	=> 'linked',
+						),
+						'type'			=> 'select',
+						'default'		=> 'no',
+						'scope'			=> $this->scope(),
+						'capabilities'	=> array( 'update_core' )
+					),
+					array(
 						'name'			=> 'ps-nav-linking',
 						'label'			=> __( 'Navigation linking', $this->plugin_slug ),
 						'label_layout'	=> 'inline',
@@ -777,6 +791,11 @@ class Pilau_Slideshow {
 			// Slideshow type
 			if ( isset( $this->custom_fields['ps-slideshow-type'] ) && $this->custom_fields['ps-slideshow-type'] ) {
 				$data_attributes['ps-slideshow-type'] = $this->custom_fields['ps-slideshow-type'];
+			}
+
+			// Indicator
+			if ( isset( $this->custom_fields['ps-indicator'] ) && $this->custom_fields['ps-indicator'] ) {
+				$data_attributes['ps-indicator'] = $this->custom_fields['ps-indicator'];
 			}
 
 			// Nav linking

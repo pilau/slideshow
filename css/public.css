@@ -144,3 +144,19 @@
   width: 100%;
   height: auto;
 }
+.ps-slideshow .ps-indicator {
+  margin: 20px 0;
+  text-align: center;
+}
+.ps-slideshow .ps-indicator ul {
+  margin: 0 auto;
+}
+.ps-slideshow .ps-indicator ul li {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  margin: 0 .5em;
+}
+.ps-slideshow .ps-indicator ul li.current {
+  font-weight: bold;
+}

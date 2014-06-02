@@ -39,6 +39,12 @@ jQuery( document ).ready( function( $ ) {
 		/** Show nav arrows? */
 		this.show_nav = this.el.hasClass( 'ps-show-nav' );
 
+		/** Indicator? */
+		this.indicator_type = this.el.data( 'ps-indicator' );
+
+		/** The indicator element */
+		this.indicator = null;
+
 		/** Mobile version ( 'show_all' | 'shrink' ) */
 		this.mobile_version = this.el.data( 'ps-mobile-version' );
 
@@ -66,6 +72,9 @@ jQuery( document ).ready( function( $ ) {
 		/** Callback function to call after slideshow rotates */
 		this.rotate_callback = ( typeof options.rotate_callback != 'undefined' ) ? options.rotate_callback : null;
 
+		/** Current slide index (1-based) */
+		this.current_slide = 1;
+
 	};
 
 	$.PilauSlideshow.prototype = {
@@ -74,22 +83,24 @@ jQuery( document ).ready( function( $ ) {
 		init: function() {
 			var ss = this; // So that ss can be used inside jQuery functions, where `this` refers to the selected element
 			var vw = $( window ).width(); // Viewport width
+			var im = ''; // Indicator markup
 			ss.list = ss.el.find( 'ul.ps-list' );
 			ss.width = ss.list.width();
 			ss.length = ss.list.children( 'li' ).length;
 			ss.start_slide = ss.get_url_param( 'ps' );
+			if ( ! ss.start_slide ) {
+				ss.start_slide = 1;
+			} else {
+				ss.current_slide = ss.start_slide;
+			}
 
 			// Initialize list width for scrolling slideshows
 			if ( ss.rotate_type == 'scroll' ) {
 				ss.list.width( this.width * this.length + 'px' );
 			}
 
-			// The first is current unless query parameter used
-			if ( ! ss.start_slide ) {
-				ss.list.children( 'li:first-child' ).addClass( 'current' );
-			} else {
-				ss.list.children( 'li:nth-child(' + ss.start_slide + ')' ).addClass( 'current' );
-			}
+			// Set current
+			ss.list.children( 'li:nth-child(' + ss.current_slide + ')' ).addClass( 'current' );
 
 			// Nav arrows?
 			if ( ! ss.el.hasClass( 'ps-one-slide' ) ) {
@@ -156,6 +167,37 @@ jQuery( document ).ready( function( $ ) {
 				}
 			});
 
+			// Indicator
+			if ( ss.indicator_type != 'no' ) {
+
+				// Build markup
+				im = '<div class="ps-indicator"><ul>';
+				ss.list.children( '.slide' ).each( function( i ) {
+					var c = [ 'indicator-' + ( i + 1 ) ];
+					var m = 'Slide ' + ( i + 1 );
+					if ( ss.start_slide == ( i + 1 ) ) {
+						c.push( 'current' );
+					}
+					if ( ss.indicator_type == 'linked' ) {
+						m = '<a href="#" class="indicator-link" id="psi-' + ( i + 1 ) + '">' + m + '</a>';
+					}
+					im += '<li class="' + c.join( ' ' ) + '">' + m + '</li>';
+				});
+				im += '</ul></div>';
+
+				// Append it
+				ss.indicator = $( im ).appendTo( ss.el );
+
+				// Click event?
+				if ( ss.indicator_type == 'linked' ) {
+					ss.el.on( 'click', '.indicator-link', function( e ) {
+						e.preventDefault();
+						ss.goToSlide( ss.get_string_part( $( this ).attr( 'id' ) ) );
+					});
+				}
+
+			}
+
 			// Initiate autorotate?
 			if ( ss.autorotate ) {
 				ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
@@ -199,30 +241,7 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Do the fade
-					switch ( ss.fade_type ) {
-
-						case 'crossfade':
-							n.show().addClass( 'next' );
-							cur.fadeOut( ss.rotate_speed, function() {
-								cur.removeClass( 'current' );
-								n.removeClass( 'next' ).addClass( 'current' );
-								// Callback
-								ss.do_rotate_callback();
-							});
-							break;
-
-						case 'colour':
-							cur.fadeOut( ss.rotate_speed, function() {
-								cur.removeClass( 'current' );
-								n.fadeIn( ss.rotate_speed, function() {
-									n.addClass( 'current' );
-								});
-								// Callback
-								ss.do_rotate_callback();
-							});
-							break;
-
-					}
+					ss.doFade( cur, n );
 
 					break;
 
@@ -289,6 +308,45 @@ jQuery( document ).ready( function( $ ) {
 		},
 
 		/**
+		 * Do a fade transition
+		 *
+		 * @since	0.1
+		 * @param	{object}	c	The current slide
+		 * @param	{object}	n	The next slide
+		 * @return	void
+		 */
+		doFade: function( c, n ) {
+			var ss = this;
+
+			// What fade type?
+			switch ( ss.fade_type ) {
+
+				case 'crossfade':
+					n.show().addClass( 'next' );
+					c.fadeOut( ss.rotate_speed, function() {
+						c.removeClass( 'current' );
+						n.removeClass( 'next' ).addClass( 'current' );
+						// Callback
+						ss.do_rotate_callback();
+					});
+					break;
+
+				case 'colour':
+					c.fadeOut( ss.rotate_speed, function() {
+						c.removeClass( 'current' );
+						n.fadeIn( ss.rotate_speed, function() {
+							n.addClass( 'current' );
+						});
+						// Callback
+						ss.do_rotate_callback();
+					});
+					break;
+
+			}
+
+		},
+
+		/**
 		 * Go to a particular slide
 		 *
 		 * Relies on the list items in the markup having ids ending with "-n",
@@ -296,6 +354,7 @@ jQuery( document ).ready( function( $ ) {
 		 *
 		 * @since	0.1
 		 * @param	{int}	n
+		 * @return	void
 		 */
 		goToSlide: function( n ) {
 			var ss = this;
@@ -308,22 +367,39 @@ jQuery( document ).ready( function( $ ) {
 			// Is index in range, and not the current one?
 			if ( to.length && n != cur_n ) {
 
-				// Get the actual index of the target item
-				i = ss.list.children( 'li' ).index( to );
+				// Which type of rotation?
+				switch ( ss.rotate_type ) {
 
-				// Scroll
-				nlo = 0;
-				if ( i > 0 ) {
-					nlo -= ( i * ss.width );
+					case 'fade':
+
+						// Do fade
+						ss.doFade( cur, to );
+
+						break;
+
+					case 'scroll':
+
+						// Get the actual index of the target item
+						i = ss.list.children( 'li' ).index( to );
+
+						// New left offset
+						nlo = 0;
+						if ( i > 0 ) {
+							nlo -= ( i * ss.width );
+						}
+
+						// Animate
+						ss.list.animate({ 'left': nlo + 'px' }, ss.rotate_speed, function() {
+							// Callback
+							ss.do_rotate_callback();
+							// Switch classes
+							cur.removeClass( 'current' );
+							to.addClass( 'current' );
+						});
+
+						break;
+
 				}
-				ss.list.animate({ 'left': nlo + 'px' }, ss.rotate_speed, function() {
-					// Callback
-					ss.do_rotate_callback();
-				});
-
-				// Switch classes
-				cur.removeClass( 'current' );
-				to.addClass( 'current' );
 
 			}
 
@@ -351,6 +427,15 @@ jQuery( document ).ready( function( $ ) {
 			// Continue autorotate?
 			if ( ss.autorotate ) {
 				ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
+			}
+
+			// Update current slide
+			ss.current_slide = ( ss.list.find( '.slide' ).index( ss.list.find( '.slide.current' ) ) + 1 );
+
+			// Update indicator?
+			if ( ss.indicator ) {
+				ss.indicator.find( 'li' ).removeClass( 'current' );
+				ss.indicator.find( 'li:nth-child(' + ss.current_slide + ')' ).addClass( 'current' );
 			}
 
 			// Custom callback if present
