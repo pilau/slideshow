@@ -620,7 +620,7 @@ class Pilau_Slideshow {
 		global $post;
 
 		// Check for default images box and remove if using custom slides
-		if ( is_admin() && is_object( $post ) && isset( $post->ID ) && slt_cf_field_value( 'ps-image-size', 'post', $post->ID ) == 'custom-slides' ) {
+		if ( is_admin() && is_object( $post ) && isset( $post->ID ) && slt_cf_field_value( 'ps-slideshow-type', 'post', $post->ID ) == 'custom' ) {
 			foreach ( $boxes as $key => $box ) {
 				if ( $box['id'] == 'pilau-slideshow-images-box' ) {
 					unset( $boxes[ $key ] );
