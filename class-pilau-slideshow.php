@@ -477,6 +477,15 @@ class Pilau_Slideshow {
 						'capabilities'	=> array( 'update_core' )
 					),
 					array(
+						'name'			=> 'ps-show-nav',
+						'label'			=> __( 'Show nav arrows to start with?', $this->plugin_slug ),
+						'label_layout'	=> 'inline',
+						'type'			=> 'checkbox',
+						'default'		=> false,
+						'scope'			=> $this->scope(),
+						'capabilities'	=> array( 'update_core' )
+					),
+					array(
 						'name'			=> 'ps-mobile-version',
 						'label'			=> __( 'Mobile version', $this->plugin_slug ),
 						'options'		=> array(
@@ -774,6 +783,11 @@ class Pilau_Slideshow {
 			if ( isset( $this->custom_fields['ps-nav-linking'] ) && $this->custom_fields['ps-nav-linking'] ) {
 				$slideshow_classes[] = 'ps-nav-linking-' . $this->custom_fields['ps-nav-linking'];
 				$data_attributes['ps-nav-linking'] = $this->custom_fields['ps-nav-linking'];
+			}
+
+			// Show nav to start?
+			if ( isset( $this->custom_fields['ps-show-nav'] ) && $this->custom_fields['ps-show-nav'] ) {
+				$slideshow_classes[] = 'ps-show-nav';
 			}
 
 			// Mobile version

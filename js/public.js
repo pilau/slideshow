@@ -36,6 +36,9 @@ jQuery( document ).ready( function( $ ) {
 		/** Full screen? */
 		this.fullscreen = this.el.hasClass( 'ps-fullscreen' );
 
+		/** Show nav arrows? */
+		this.show_nav = this.el.hasClass( 'ps-show-nav' );
+
 		/** Mobile version ( 'show_all' | 'shrink' ) */
 		this.mobile_version = this.el.data( 'ps-mobile-version' );
 
@@ -90,29 +93,37 @@ jQuery( document ).ready( function( $ ) {
 
 			// Nav arrows
 			ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
-			ss.el.on( 'mouseenter', function() {
-				var el = $( this );
+			if ( ! ss.show_nav ) {
 
-				// Fade nav arrows in
-				if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
-					el.addClass( 'ps-fading-nav-in' );
-					el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
-						el.removeClass( 'ps-fading-nav-in' );
-					});
-				}
+				// Fade nav in or out
+				ss.el.on( 'mouseenter', function() {
+					var el = $( this );
 
-			}).on( 'mouseleave', function() {
-				var el = $( this );
+					// Fade nav arrows in
+					if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
+						el.addClass( 'ps-fading-nav-in' );
+						el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
+							el.removeClass( 'ps-fading-nav-in' );
+						});
+					}
 
-				// Fade nav arrows out
-				if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
-					el.addClass( 'ps-fading-nav-out' );
-					el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
-						el.removeClass( 'ps-fading-nav-out' );
-					});
-				}
+				}).on( 'mouseleave', function() {
+					var el = $( this );
 
-			}).on( 'click', 'a.nav', function( e ) {
+					// Fade nav arrows out
+					if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
+						el.addClass( 'ps-fading-nav-out' );
+						el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
+							el.removeClass( 'ps-fading-nav-out' );
+						});
+					}
+
+				});
+
+			}
+
+			// Nav click event
+			ss.el.on( 'click', 'a.nav', function( e ) {
 				e.preventDefault();
 				var el = $( this );
 
