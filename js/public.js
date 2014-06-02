@@ -45,7 +45,7 @@ jQuery( document ).ready( function( $ ) {
 		/** The indicator element */
 		this.indicator = null;
 
-		/** Mobile version ( 'show_all' | 'shrink' ) */
+		/** Mobile version ( 'show_all' | 'show_first' | 'shrink' ) */
 		this.mobile_version = this.el.data( 'ps-mobile-version' );
 
 		/** Rotate type ( 'scroll' | 'fade' ) */

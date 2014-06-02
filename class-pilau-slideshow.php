@@ -743,9 +743,12 @@ class Pilau_Slideshow {
 						}
 						.ps-slideshow .ps-wrapper .ps-list li.slide {
 							display: block !important;
-							position: static !important;
+							position: relative !important;
 							margin-bottom: 20px;
 							height: auto !important;
+						}
+						.ps-slideshow .ps-indicator {
+							display: none;
 						}
 						<?php if ( $this->custom_fields['ps-mobile-version'] == 'show_first' ) { ?>
 							.ps-slideshow .ps-wrapper .ps-list li.slide {
