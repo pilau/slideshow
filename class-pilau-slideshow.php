@@ -873,31 +873,33 @@ class Pilau_Slideshow {
 			} else {
 
 				// Build slides from images
-				foreach ( $this->custom_fields['ps-images'] as $image_id ) {
+				if ( ! empty( $this->custom_fields['ps-images'] ) && is_array( $this->custom_fields['ps-images'] ) ) {
+					foreach ( $this->custom_fields['ps-images'] as $image_id ) {
 
-					// Get image infos
-					$image_size = $this->fullscreen ? 'full' : $this->image_size['name'];
-					$image_infos = wp_get_attachment_image_src( $image_id, $image_size );
+						// Get image infos
+						$image_size = $this->fullscreen ? 'full' : $this->image_size['name'];
+						$image_infos = wp_get_attachment_image_src( $image_id, $image_size );
 
-					if ( $image_infos ) {
+						if ( $image_infos ) {
 
-						// Construct markup
-						$slide_markup = '<figure>';
-						$slide_markup .= '<img src="' . $image_infos[0] . '" width="' . $image_infos[1] . '" height="' . $image_infos[2] . '" alt="' . get_the_title( $image_id ) . '">';
-						if ( in_array( $this->custom_fields['ps-slideshow-type'], array( 'images_titles', 'images_titles_captions' ) ) ) {
-							$image_post = get_post( $image_id );
-							$slide_markup .= '<figcaption class="text">';
-							$slide_markup .= '<h2 class="title">' . apply_filters( 'the_title', $image_post->post_title ) . '</h2>';
-							if ( $this->custom_fields['ps-slideshow-type'] == 'images_titles_captions' ) {
-								$slide_markup .= '<p class="caption">' . apply_filters( 'get_the_excerpt', $image_post->post_excerpt ) . '</p>';
+							// Construct markup
+							$slide_markup = '<figure>';
+							$slide_markup .= '<img src="' . $image_infos[0] . '" width="' . $image_infos[1] . '" height="' . $image_infos[2] . '" alt="' . get_the_title( $image_id ) . '">';
+							if ( in_array( $this->custom_fields['ps-slideshow-type'], array( 'images_titles', 'images_titles_captions' ) ) ) {
+								$image_post = get_post( $image_id );
+								$slide_markup .= '<figcaption class="text">';
+								$slide_markup .= '<h2 class="title">' . apply_filters( 'the_title', $image_post->post_title ) . '</h2>';
+								if ( $this->custom_fields['ps-slideshow-type'] == 'images_titles_captions' ) {
+									$slide_markup .= '<p class="caption">' . apply_filters( 'get_the_excerpt', $image_post->post_excerpt ) . '</p>';
+								}
+								$slide_markup .= '</figcaption>';
 							}
-							$slide_markup .= '</figcaption>';
+							$slide_markup .= '</figure>';
+							$slides[ $image_id ] = apply_filters( 'ps_slideshow_image_markup', $slide_markup, $image_id );
+
 						}
-						$slide_markup .= '</figure>';
-						$slides[ $image_id ] = apply_filters( 'ps_slideshow_image_markup', $slide_markup, $image_id );
 
 					}
-
 				}
 
 			}
