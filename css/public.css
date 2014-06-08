@@ -12,10 +12,13 @@
   position: absolute;
   top: 0;
   left: 0;
+  margin: 0 !important;
 }
 .ps-slideshow .ps-wrapper ul.ps-list > li {
   height: 100%;
   position: relative;
+  margin: 0 !important;
+  list-style: none !important;
 }
 .ps-slideshow .ps-wrapper ul.ps-list > li img {
   display: block;

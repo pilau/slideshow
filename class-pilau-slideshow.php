@@ -142,6 +142,9 @@ class Pilau_Slideshow {
 		add_action( 'template_redirect', array( $this, 'output_init' ) );
 		add_action( 'wp_head', array( $this, 'dynamic_css' ) );
 
+		// Shortcodes
+		add_shortcode( 'pilau-slideshow', array( $this, 'slideshow_shortcode' ) );
+
 	}
 
 	/**
@@ -382,6 +385,25 @@ class Pilau_Slideshow {
 	 */
 	public function output_dcf_dependency_notice() {
 		echo '<div class="error"><p>' . __( 'The Pilau Slideshow plugin depends on the <a href="http://wordpress.org/plugins/developers-custom-fields/">Developer\'s Custom Fields</a> plugin, which isn\'t currently activated', $this->plugin_slug ) . '</p></div>';
+	}
+
+	/**
+	 * Slideshow shortcode
+	 *
+	 * @since	0.1
+	 */
+	public function slideshow_shortcode( $atts = array() ) {
+		$a = shortcode_atts( array(
+		), $atts );
+		$slideshow = '';
+
+		// Need to do output buffering because slideshow method outputs directly
+		ob_start();
+		$this->slideshow();
+		$slideshow = ob_get_contents();
+		ob_end_clean();
+
+		return $slideshow;
 	}
 
 	/**
