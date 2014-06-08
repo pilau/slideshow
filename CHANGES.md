@@ -2,6 +2,7 @@
 
 ## 0.3
 * Added ability to choose between navigation arrow linking options
+* Added POT file for translations
 
 ## 0.2
 * Use `setTimeout` instead of `setInterval` to avoid speeding-up issues

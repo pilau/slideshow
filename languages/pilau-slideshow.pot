@@ -1,0 +1,210 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Pilau Slideshow\n"
+"POT-Creation-Date: 2014-06-08 21:36-0000\n"
+"PO-Revision-Date: 2014-06-08 21:36-0000\n"
+"Last-Translator: Steve Taylor <steve@sltaylor.co.uk>\n"
+"Language-Team: Pilau <pilaubase@gmail.com>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../class-pilau-slideshow.php:301 ../class-pilau-slideshow.php:302
+msgid "Pilau slideshow"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:384
+msgid ""
+"The Pilau Slideshow plugin depends on the <a href=\"http://wordpress.org/"
+"plugins/developers-custom-fields/\">Developer's Custom Fields</a> plugin, "
+"which isn't currently activated"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:437
+msgid ""
+"Adjust the settings for the slideshow here, and select and order the images "
+"to use below."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:441
+msgid "Slideshow type"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:444
+msgid "Just images"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:445
+msgid "Images with titles"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:446
+msgid "Images with titles and captions"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:447
+msgid "Custom slides"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:451
+msgid ""
+"If custom slides are being used, make sure to use the "
+"<code>ps_custom_slides</code> filter to supply the slides markup."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:457
+msgid "Image size"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:462
+msgid ""
+"If custom slides are being used, even if slides contain something other than "
+"an image covering the whole slide space, this should still be set to an "
+"image size that corresponds to the slide size."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:468
+msgid "Indicator"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:471
+msgid "No indicator"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:472
+msgid "Plain indicator"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:473
+msgid "Linked indicator"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:482
+msgid "Navigation linking"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:485
+msgid "Make each half of slideshow clickable"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:486
+msgid "Make only arrows clickable"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:495
+msgid "Show nav arrows to start with?"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:504
+msgid "Mobile version"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:506
+msgid "Show all slides"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:507
+msgid "Show first slide only"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:508
+msgid "Shrink slideshow"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:517
+msgid "Rotate type"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:519
+msgid ""
+"Note that scrolling slideshows are not currently responsive to screens "
+"narrower than the normal slideshow width."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:521
+msgid "Fade"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:522
+msgid "Scroll"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:530
+msgid "Fade type"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:533
+msgid "Crossfade"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:534
+msgid "Fade through colour"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:542
+msgid "Fade colour"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:550
+msgid "Rotate speed"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:553
+msgid ""
+"For fading rotation that crossfades and scrolling rotation, this will be the "
+"duration of the crossfade or scroll. For fading through a colour, this will "
+"be the duration of the fade out as well as the duration of the fade in."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:554 ../class-pilau-slideshow.php:575
+msgid "milliseconds"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:562
+msgid "Auto-rotate?"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:564
+msgid "Start automatic rotation when page loads?"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:571
+msgid "Auto-rotate interval"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:574
+msgid "How long to pause on each slide during auto-rotation."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:583
+msgid "Behaviour when mouse hovers over slideshow"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:586
+msgid "Pause"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:587
+msgid "Stop"
+msgstr ""
+
+#: ../class-pilau-slideshow.php:604
+msgid ""
+"Upload images through the <i>Add Media</i> button above the content editor, "
+"and select and order the ones you want to include below."
+msgstr ""
+
+#: ../class-pilau-slideshow.php:608
+msgid "Images"
+msgstr ""
+
+#: ../views/admin.php:22
+msgid "Settings updated successfully."
+msgstr ""

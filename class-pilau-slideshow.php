@@ -23,7 +23,7 @@ class Pilau_Slideshow {
 	 *
 	 * @var     string
 	 */
-	protected $version = '0.2';
+	protected $version = '0.3';
 
 	/**
 	 * Unique identifier for your plugin.
@@ -194,7 +194,7 @@ class Pilau_Slideshow {
 		$domain = $this->plugin_slug;
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
-		load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+		load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 		// Mobile breakpoint
 		$this->mobile_breakpoint = apply_filters( 'ps_mobile_breakpoint', 640 );
