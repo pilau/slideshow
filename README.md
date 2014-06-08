@@ -20,6 +20,8 @@ Add a filter to your theme to specify which pages slideshows will apply to (see 
 		return array( 'posts' => array( 693 ) );
 	}
 
+### Template code
+
 In the templates for pages with slideshows, use the following to output the page's slideshow:
 
 	$PS = null;
@@ -33,6 +35,10 @@ To activate fullscreen mode, before outputting the slideshow:
 	$PS->activate_fullscreen();
 
 Slideshows can start from slides other than the first one by passing the `ps` query string parameter, set to the 1-based index of the slide.
+
+### Shortcodes
+
+Use the `[pilau-slideshow]` shortcode to place the slideshow in the content area of posts where the slideshow has been applied using the `ps_scope` filter.
 
 ### Custom slides
 
