@@ -36,7 +36,10 @@ jQuery( document ).ready( function( $ ) {
 		/** Full screen? */
 		this.fullscreen = this.el.hasClass( 'ps-fullscreen' );
 
-		/** Show nav arrows? */
+		/** Navigation arrows options */
+		this.nav_arrows = this.el.data( 'ps-nav-linking' );
+
+		/** Show nav arrows to start with? */
 		this.show_nav = this.el.hasClass( 'ps-show-nav' );
 
 		/** Indicator? */
@@ -103,7 +106,7 @@ jQuery( document ).ready( function( $ ) {
 			ss.list.children( 'li:nth-child(' + ss.current_slide + ')' ).addClass( 'current' );
 
 			// Nav arrows?
-			if ( ! ss.el.hasClass( 'ps-one-slide' ) ) {
+			if ( ! ss.el.hasClass( 'ps-one-slide' ) && ss.nav_arrows != 'no_arrows' ) {
 
 				// Append arrows
 				ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );

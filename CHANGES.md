@@ -4,6 +4,7 @@
 * Added ability to choose between navigation arrow linking options
 * Added POT file for translations
 * Added `[pilau-slideshow]` shortcode
+* Added option to have no navigation arrows
 
 ## 0.2
 * Use `setTimeout` instead of `setInterval` to avoid speeding-up issues

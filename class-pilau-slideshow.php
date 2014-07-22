@@ -501,11 +501,12 @@ class Pilau_Slideshow {
 					),
 					array(
 						'name'			=> 'ps-nav-linking',
-						'label'			=> __( 'Navigation linking', $this->plugin_slug ),
+						'label'			=> __( 'Navigation arrow options', $this->plugin_slug ),
 						'label_layout'	=> 'inline',
 						'options'		=> array(
 							__( 'Make each half of slideshow clickable', $this->plugin_slug )	=> 'half',
 							__( 'Make only arrows clickable', $this->plugin_slug )				=> 'arrows_only',
+							__( 'No navigation arrows', $this->plugin_slug )					=> 'no_arrows',
 						),
 						'type'			=> 'select',
 						'default'		=> 'half',
