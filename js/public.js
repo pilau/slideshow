@@ -89,7 +89,7 @@ jQuery( document ).ready( function( $ ) {
 			var im = ''; // Indicator markup
 
 			// No dynamic stuff if mobile and we're not just shrinking
-			if ( vw < pilau_slideshow.mobile_breakpoint && ss.mobile_version != 'shrink' ) {
+			if ( ! ( vw < parseInt( pilau_slideshow.mobile_breakpoint ) || ss.mobile_version == 'shrink' ) ) {
 				ss.list = ss.el.find( 'ul.ps-list' );
 				ss.width = ss.list.width();
 				ss.length = ss.list.children( 'li' ).length;
