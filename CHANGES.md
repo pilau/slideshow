@@ -5,6 +5,7 @@
 * Added POT file for translations
 * Added `[pilau-slideshow]` shortcode
 * Added option to have no navigation arrows
+* Fixed JS so dynamic code only initializes when above mobile breakpoint, or mobile version is set to just shrink
 
 ## 0.2
 * Use `setTimeout` instead of `setInterval` to avoid speeding-up issues
