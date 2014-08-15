@@ -87,130 +87,134 @@ jQuery( document ).ready( function( $ ) {
 			var ss = this; // So that ss can be used inside jQuery functions, where `this` refers to the selected element
 			var vw = $( window ).width(); // Viewport width
 			var im = ''; // Indicator markup
-			ss.list = ss.el.find( 'ul.ps-list' );
-			ss.width = ss.list.width();
-			ss.length = ss.list.children( 'li' ).length;
-			ss.start_slide = ss.get_url_param( 'ps' );
-			if ( ! ss.start_slide ) {
-				ss.start_slide = 1;
-			} else {
-				ss.current_slide = ss.start_slide;
-			}
 
-			// Initialize list width for scrolling slideshows
-			if ( ss.rotate_type == 'scroll' ) {
-				ss.list.width( this.width * this.length + 'px' );
-			}
+			// No dynamic stuff if mobile and we're not just shrinking
+			if ( vw < pilau_slideshow.mobile_breakpoint && ss.mobile_version != 'shrink' ) {
+				ss.list = ss.el.find( 'ul.ps-list' );
+				ss.width = ss.list.width();
+				ss.length = ss.list.children( 'li' ).length;
+				ss.start_slide = ss.get_url_param( 'ps' );
+				if ( ! ss.start_slide ) {
+					ss.start_slide = 1;
+				} else {
+					ss.current_slide = ss.start_slide;
+				}
 
-			// Set current
-			ss.list.children( 'li:nth-child(' + ss.current_slide + ')' ).addClass( 'current' );
+				// Initialize list width for scrolling slideshows
+				if ( ss.rotate_type == 'scroll' ) {
+					ss.list.width( this.width * this.length + 'px' );
+				}
 
-			// Nav arrows?
-			if ( ! ss.el.hasClass( 'ps-one-slide' ) && ss.nav_arrows != 'no_arrows' ) {
+				// Set current
+				ss.list.children( 'li:nth-child(' + ss.current_slide + ')' ).addClass( 'current' );
 
-				// Append arrows
-				ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
+				// Nav arrows?
+				if ( ! ss.el.hasClass( 'ps-one-slide' ) && ss.nav_arrows != 'no_arrows' ) {
 
-				// If nav is hidden to begin, we need fading
-				if ( ! ss.show_nav ) {
+					// Append arrows
+					ss.nav.append( '<a href="#" class="nav previous"><span class="arrow">Previous</span></a><a href="#" class="nav next"><span class="arrow">Next</span></a>' );
 
-					// Fade nav in or out
-					ss.el.on( 'mouseenter', function() {
+					// If nav is hidden to begin, we need fading
+					if ( ! ss.show_nav ) {
+
+						// Fade nav in or out
+						ss.el.on( 'mouseenter', function() {
+							var el = $( this );
+
+							// Fade nav arrows in
+							if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
+								el.addClass( 'ps-fading-nav-in' );
+								el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
+									el.removeClass( 'ps-fading-nav-in' );
+								});
+							}
+
+						}).on( 'mouseleave', function() {
+							var el = $( this );
+
+							// Fade nav arrows out
+							if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
+								el.addClass( 'ps-fading-nav-out' );
+								el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
+									el.removeClass( 'ps-fading-nav-out' );
+								});
+							}
+
+						});
+
+					}
+
+					// Nav click event
+					ss.el.on( 'click', 'a.nav', function( e ) {
+						e.preventDefault();
 						var el = $( this );
 
-						// Fade nav arrows in
-						if ( ! el.hasClass( 'ps-fading-nav-out' ) ) {
-							el.addClass( 'ps-fading-nav-in' );
-							el.find( 'a.nav' ).animate({ opacity: 1 }, 200, function() {
-								el.removeClass( 'ps-fading-nav-in' );
-							});
-						}
+						// Completely stop rotating
+						ss.stop();
 
-					}).on( 'mouseleave', function() {
-						var el = $( this );
-
-						// Fade nav arrows out
-						if ( ! el.hasClass( 'ps-fading-nav-in' ) ) {
-							el.addClass( 'ps-fading-nav-out' );
-							el.find( 'a.nav' ).animate({ opacity: 0 }, 200, function() {
-								el.removeClass( 'ps-fading-nav-out' );
-							});
+						if ( ! el.hasClass( 'disabled' ) ) {
+							// Temporarily disable both nav links
+							ss.nav.find( 'a.nav' ).addClass( 'disabled' );
+							ss.rotate( el.hasClass( 'previous' ) ? 'previous' : 'next' );
 						}
 
 					});
 
 				}
 
-				// Nav click event
-				ss.el.on( 'click', 'a.nav', function( e ) {
-					e.preventDefault();
-					var el = $( this );
-
-					// Completely stop rotating
-					ss.stop();
-
-					if ( ! el.hasClass( 'disabled' ) ) {
-						// Temporarily disable both nav links
-						ss.nav.find( 'a.nav' ).addClass( 'disabled' );
-						ss.rotate( el.hasClass( 'previous' ) ? 'previous' : 'next' );
+				// Hover anywhere on slideshow
+				ss.el.on( 'mouseover', function() {
+					// Always stop autorotating on mouseover (not completely - may be just pausing)
+					clearInterval( ss.autorotate_timer );
+				} ).on( 'mouseout', function() {
+					// If only a pause was flagged, restart autorotating if appropriate
+					if ( ss.el.hasClass( 'ps-autorotate' ) && ss.autorotate_hover == 'pause' ) {
+						ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 					}
-
 				});
 
-			}
+				// Indicator
+				if ( ss.indicator_type != 'no' ) {
 
-			// Hover anywhere on slideshow
-			ss.el.on( 'mouseover', function() {
-				// Always stop autorotating on mouseover (not completely - may be just pausing)
-				clearInterval( ss.autorotate_timer );
-			} ).on( 'mouseout', function() {
-				// If only a pause was flagged, restart autorotating if appropriate
-				if ( ss.el.hasClass( 'ps-autorotate' ) && ss.autorotate_hover == 'pause' ) {
+					// Build markup
+					im = '<div class="ps-indicator"><ul>';
+					ss.list.children( '.slide' ).each( function( i ) {
+						var c = [ 'indicator-' + ( i + 1 ) ];
+						var m = 'Slide ' + ( i + 1 );
+						if ( ss.start_slide == ( i + 1 ) ) {
+							c.push( 'current' );
+						}
+						if ( ss.indicator_type == 'linked' ) {
+							m = '<a href="#" class="indicator-link" id="psi-' + ( i + 1 ) + '">' + m + '</a>';
+						}
+						im += '<li class="' + c.join( ' ' ) + '">' + m + '</li>';
+					});
+					im += '</ul></div>';
+
+					// Append it
+					ss.indicator = $( im ).appendTo( ss.el );
+
+					// Click event?
+					if ( ss.indicator_type == 'linked' ) {
+						ss.el.on( 'click', '.indicator-link', function( e ) {
+							e.preventDefault();
+							ss.goToSlide( ss.get_string_part( $( this ).attr( 'id' ) ) );
+						});
+					}
+
+				}
+
+				// Initiate autorotate?
+				if ( ss.autorotate ) {
 					ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
 				}
-			});
 
-			// Indicator
-			if ( ss.indicator_type != 'no' ) {
-
-				// Build markup
-				im = '<div class="ps-indicator"><ul>';
-				ss.list.children( '.slide' ).each( function( i ) {
-					var c = [ 'indicator-' + ( i + 1 ) ];
-					var m = 'Slide ' + ( i + 1 );
-					if ( ss.start_slide == ( i + 1 ) ) {
-						c.push( 'current' );
-					}
-					if ( ss.indicator_type == 'linked' ) {
-						m = '<a href="#" class="indicator-link" id="psi-' + ( i + 1 ) + '">' + m + '</a>';
-					}
-					im += '<li class="' + c.join( ' ' ) + '">' + m + '</li>';
-				});
-				im += '</ul></div>';
-
-				// Append it
-				ss.indicator = $( im ).appendTo( ss.el );
-
-				// Click event?
-				if ( ss.indicator_type == 'linked' ) {
-					ss.el.on( 'click', '.indicator-link', function( e ) {
-						e.preventDefault();
-						ss.goToSlide( ss.get_string_part( $( this ).attr( 'id' ) ) );
-					});
+				// For fullscreen above mobile, position halfway down viewport
+				if ( ss.fullscreen && vw >= pilau_slideshow.mobile_breakpoint ) {
+					ss.el.css( 'margin-top', ( ( $( window ).height() - ss.el.outerHeight() ) / 2 ) + 'px' );
 				}
 
 			}
-
-			// Initiate autorotate?
-			if ( ss.autorotate ) {
-				ss.autorotate_timer = setTimeout( function() { ss.rotate( 'next' ) }, ss.autorotate_interval );
-			}
-
-			// For fullscreen above mobile, position halfway down viewport
-			if ( ss.fullscreen && vw >= pilau_slideshow.mobile_breakpoint ) {
-				ss.el.css( 'margin-top', ( ( $( window ).height() - ss.el.outerHeight() ) / 2 ) + 'px' );
-			}
-
 		},
 
 		/** Rotate slideshow */
