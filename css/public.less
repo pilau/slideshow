@@ -203,3 +203,34 @@
 		}
 	}
 }
+
+// Show first for below IE8 (same as responsive styles include directly in header)
+.lt-ie8 {
+	.ps-slideshow {
+		.ps-wrapper {
+			padding: 0;
+			background-color: transparent;
+			overflow: visible;
+			height: auto;
+			.ps-list {
+				position: static !important;
+				padding: 0;
+				li.slide {
+					display: none !important;
+					position: relative !important;
+					margin-bottom: 20px;
+					height: auto !important;
+					&:first-child {
+						display: block !important;
+					}
+				}
+			}
+		}
+		.ps-indicator {
+			display: none;
+		}
+		a.nav {
+			display: none !important;
+		}
+	}
+}

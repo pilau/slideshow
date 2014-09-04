@@ -78,6 +78,15 @@ jQuery( document ).ready( function( $ ) {
 		/** Current slide index (1-based) */
 		this.current_slide = 1;
 
+		/**
+		 * Unsupported IE version?
+		 *
+		 * IE7 and below are served non-dynamic version (as per mobile "show first")
+		 * Detection depends on a class on the HTML tag, as per:
+		 * @link	http://paulirish.com/2008/conditional-stylesheets-vs-styles-hacks-answer-neither/
+		 */
+		this.is_unsupported_ie = $( 'html' ).hasClass( 'lt-ie8' );
+
 	};
 
 	$.PilauSlideshow.prototype = {
@@ -88,8 +97,11 @@ jQuery( document ).ready( function( $ ) {
 			var vw = $( window ).width(); // Viewport width
 			var im = ''; // Indicator markup
 
-			// No dynamic stuff if mobile and we're not just shrinking
-			if ( ! ( vw < parseInt( pilau_slideshow.mobile_breakpoint ) || ss.mobile_version == 'shrink' ) ) {
+			/* Only do dynamic stuff if:
+			 * - Larger than mobile OR, mobile and shrinking
+			 * - Not an unsupported IE version
+			 */
+			if ( ( vw >= parseInt( pilau_slideshow.mobile_breakpoint ) || ss.mobile_version == 'shrink' ) && ! ss.is_unsupported_ie ) {
 				ss.list = ss.el.find( 'ul.ps-list' );
 				ss.width = ss.list.width();
 				ss.length = ss.list.children( 'li' ).length;

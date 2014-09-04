@@ -7,6 +7,8 @@ A jQuery-driven slideshow plugin for WordPress.
 
 **NOTE:** Currently only slideshows with the `fade` rotate type are responsive.
 
+**NOTE:** A simplified, non-dynamic version of slideshows is shown for IE 7 and below, assuming an `lt-ie8` class is applied to the `html` tag, as per [this technique](http://paulirish.com/2008/conditional-stylesheets-vs-styles-hacks-answer-neither/). If such a class is not in place, slideshows in IE 7 and below may be broken.
+
 ## Installation
 
 Note that the plugin folder should be named `slideshow`. This is because if the [GitHub Updater plugin](https://github.com/afragen/github-updater) is used to update this plugin, if the folder is named something other than this, it will get deleted, and the updated plugin folder with a different name will cause the plugin to be silently deactivated. Also, the folder name is hard-coded in the plugin's CSS.
