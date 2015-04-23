@@ -1,0 +1,9 @@
+# Interconnect IT WP data migration script - http://interconnectit.com/124/search-and-replace-for-wordpress-databases/
+searchreplacedb2.php
+
+# Any system or IDE files
+Thumbs.db
+.DS_Store
+.DS_Store?
+.idea/*
+.tweetcache
